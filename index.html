@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="santiago bernal betancourth">
+    <meta name="keyword" content="videometrik, dashboard, estadisticas">
+    <link rel="shortcut icon" href="img/favicon.png">
+
+    <title>Iniciar sesión - VideoMetrik</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-reset.css" rel="stylesheet">
+    <!--external css-->
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/style-responsive.css" rel="stylesheet" />
+</head>
+
+  <body class="login-body">
+
+    <div class="container">
+
+      <form class="form-signin" name="login_user" id="frmLogin">
+        <h2 class="form-signin-heading">Inicio de sesión</h2>
+        <div class="login-wrap">
+            <input type="text" name='nick' class="form-control" id="txtLogin_Usuario" placeholder="Usuario" required autofocus>
+            <input type="password" name='pass' class="form-control" id="txtLogin_Clave" placeholder="Contraseña" required>
+            <label class="checkbox">
+                <input type="checkbox" value="remember-me"> Recordar
+                <span class="pull-right">
+                    <a data-toggle="modal" href="#myModal"> Olvidaste tu contraseña?</a>
+                    <!-- reset.php -->
+
+                </span>
+            </label>
+            <button class="btn btn-lg btn-login btn-block" name="login" type="submit">Iniciar sesión</button>
+            <div class="registration">
+                ¿No tienes cuenta?
+                <a class="" href="registration.php">
+                    Crear cuenta
+                </a>
+            </div>
+
+        </div>
+      </form>
+                <!-- Modal -->
+          <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                          <h4 class="modal-title">Olvidaste tu contraseña?</h4>
+                      </div>
+                      <form name="form-reset" action="reset.php" method="post">
+                      <div class="modal-body">
+                          <p>Escribe tu correo electrónico, te enviaremos allí la nueva contraseña.</p>
+                          <input type="text" name="correo-reset" placeholder="correo" autocomplete="off" class="form-control placeholder-no-fix">
+
+                      </div>
+                      <div class="modal-footer">
+                          <button data-dismiss="modal" class="btn btn-default" type="button">Cancelar</button>
+                          <button class="btn btn-success" type="submit" name="boton-reset">Enviar</button>
+                      </div>
+                    </form>
+                  </div>
+              </div>
+          </div>
+          <!-- modal -->
+
+    </div>
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="libs/jquery.js"></script>
+    <script src="libs/bootstrap.min.js"></script>
+
+    <script src="js/login.js"></script>
+
+  </body>
+</html>
