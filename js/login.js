@@ -27,7 +27,7 @@ function ready_login()
   {
     objUser.cDate = cDate;
     localStorage.setItem("ls_videomet", JSON.stringify(objUser));    
-    window.location.replace("admin/home.html");
+    window.location.replace("home.html");
   } else
   {
     delete localStorage.ls_videomet;    
@@ -51,7 +51,7 @@ function frmLogin_submit(event)
       if (data != 0)
       {
         localStorage.setItem("ls_videomet", JSON.stringify(data));  
-        window.location.replace("admin/home.html");
+        window.location.replace("home.html");
       } else
       {
         $(".alert").html("<strong>Error!</strong> Acceso denegado.");

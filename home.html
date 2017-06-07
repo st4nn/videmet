@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="CeHis LTDA">
+    <meta name="keyword" content="FlatLab, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <link rel="shortcut icon" href="img/favicon.png">
+
+    <title>Videometrik - dashboard</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-reset.css" rel="stylesheet">
+    <!--external css-->
+    <!--<link href="css/slidebars.css" rel="stylesheet"> -->
+    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+      <!--right slidebar-->
+      <link href="css/slidebars.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+
+
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/style-responsive.css" rel="stylesheet" />
+
+    <link href="css/bootstrap-select.min.css" rel="stylesheet">
+    <link href="css/sweetalert.css" rel="stylesheet">
+
+  </head>
+  <!-- hacemos el llamado a la función recargar para que nos diga cuántos usuarios online hay -->
+  <!--<body onLoad="setInterval('recargar()',5000);">-->
+  <body>
+
+    <section id="container" >
+        <!--header start-->
+        <header class="header white-bg">
+                <div class="sidebar-toggle-box">
+                    <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
+                </div>
+              <!--logo start-->
+              <a href="index.php" class="logo">Video<span>metrik</span></a>
+              <!--logo end-->
+              <div class="top-nav ">
+                  <!--search & user info start-->
+                  <ul class="nav pull-right top-menu">
+                      <!-- user login dropdown start-->
+                      <li class="dropdown">
+                          <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                              <img alt="profile image" src="img/avatar-mini4.jpg">
+                              <span class="username"></span>
+                              <b class="caret"></b>
+                          </a>
+                          <ul class="dropdown-menu extended logout">
+                              <div class="log-arrow-up"></div>
+                              <li><a href="#" class="lblCerrarSesion"><i class="fa fa-key"></i> Salir</a></li>
+                          </ul>
+                      </li>
+                      <!-- user login dropdown end -->
+                  </ul>
+                  <!--search & user info end-->
+              </div>
+          </header>
+        <!--header end-->
+        <!--sidebar start-->
+        <aside>
+            <div id="sidebar"  class="nav-collapse ">
+                <!-- sidebar menu start-->
+                <ul class="sidebar-menu" id="nav-accordion">
+                    <li>
+                        <a class="active" href="index.php"><i class="fa fa-dashboard"></i><span>Dashboard</span></a>
+                    </li>
+                    <li class="sub-menu">
+                        <a href="contact.php?opcion=1" ><i class="fa fa-bug"></i><span>Reportar fallos</span></a>
+                    </li>
+                    <li class="sub-menu">
+                      <a href="contact.php?opcion=2" ><i class="fa fa-comment"></i><span>Solicitar nueva función</span></a>
+                    </li>
+                    <li class="sub-menu">
+                        <a href="contact.php?opcion=3" ><i class="fa fa-envelope"></i><span>Contacto</span></a>
+                    </li>   
+                    <li class="sub-menu">
+                        <a href="#" class="lblCerrarSesion" ><i class="fa fa-key"></i><span>Salir</span></a>
+                    </li>
+
+                </ul>
+                <!-- sidebar menu end-->
+            </div>
+        </aside>
+        <!--sidebar end-->
+        <!--main content start-->
+        <section id="main-content">
+            <section class="wrapper">
+                <!--state overview start-->
+                <div class="row state-overview">
+                  <div class="col-lg-12 text-right">
+                    <section class="panel">
+                      <div class="panel-body">
+                        <div class="col-sm-6">
+                          <select id="txtHome_Applications" class="selectpicker form-control">
+                          </select>
+                        </div>
+                        <div class="col-sm-6">
+                          <small id="lblHome_Fecha"></small>
+                          <select class="selectpicker col-sm-4">
+                            <option>Hoy</option>
+                            <option>Últimas 24 hrs</option>
+                            <option>Últimos 7 días</option>
+                            <option>Últimos 30 días</option>
+                            <option>Últimos dos meses</option>
+                          </select>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                        </div>                      
+                      </div>
+                    </section>
+                  </div>
+
+                  <div class="col-lg-3 col-sm-6">
+                      <section class="panel">
+                          <div class="symbol yellow">
+                              <i class="fa fa-users"></i>
+                          </div>
+                          <div class="value">
+                              <h1 class=" count3">
+                                  <div id="lblHome_Actuales">0</div>
+                              </h1>
+                              <p>Usuarios Online</p>
+                          </div>
+                      </section>
+                  </div>
+
+                 <div class="col-lg-3 col-sm-6">
+                      <section class="panel">
+                          <div class="symbol blue">
+                              <i class="fa fa-bar-chart-o"></i>
+                          </div>
+                          <div class="value">
+                              <h1 class="count4">
+                                  <div id="lblHome_Totales">0</div>
+                              </h1>
+                              <p>Conexiones Totales</p>
+                          </div>
+                      </section>
+                  </div>
+
+                  <div class="col-lg-3 col-sm-6">
+                      <section class="panel">
+                          <div class="symbol terques">
+                              <i class="fa fa-user"></i>
+                          </div>
+                          <div class="value">
+                              <h1 class="count">
+                                  <div id="lblHome_Unicos">0</div>
+                              </h1>
+                              <p> Usuarios Únicos</p>
+                          </div>
+                      </section>
+                  </div>
+
+                  <div class="col-lg-3 col-sm-6">
+                      <section class="panel">
+                          <div class="symbol red">
+                              <i class="fa fa-clock-o"></i>
+                          </div>
+                          <div class="value">
+                              <h1 class=" count2">
+                                  <span id="lblHome_TiempoPromedio"></span>
+                              </h1>
+                              <p>Tiempo Promedio</p>
+                          </div>
+                      </section>
+                  </div>
+
+                </div>
+                <!--state overview end-->
+
+                                    <!-- page start-->
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <section class="panel">
+                                <header class="panel-heading"><!--<i class="fa fa-info-circle"></i>-->
+                                    Histórico de datos
+                                </header>
+                                <div class="panel-body">
+                                <?php mostrargrafica1(); ?>
+                                    <div id="hero-graph" class="graph"></div>
+                                </div>
+                                <!-- <a href="#"><span class="detalles">Más Detalles</span></a> -->
+                            </section>
+                        </div>
+                        <div class="col-lg-6">
+                            <section class="panel">
+                                <header class="panel-heading"><!--<i class="fa fa-info-circle"></i>-->
+                                    Origen del espectador
+                                    <!-- <button type="button" class="btn btn-primary"><i class="fa fa-bar-chart-o"></i> Conexiones</button>
+                                    <button type="button" class="btn btn-info"><i class="fa fa-user"></i> Usuarios</button> -->
+                                </header>
+                               <div class="panel-body">
+                                <?php mostrargrafica2(); ?>
+                                <div id="regions_div"></div>
+                                </div> 
+                               <!-- <a href="#"><span class="detalles">Más Detalles</span></a> -->
+                            </section>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <section class="panel">
+                                <header class="panel-heading"><!--<i class="fa fa-info-circle"></i>-->
+                                    Audiencia por meses
+                                </header>
+                                
+                                <div class="panel-body">
+                                  <div><?php mostrargrafica3(); ?></div>
+                                </div> 
+                                <p>
+                              <!-- <a href="#"><span class="detalles">Más Detalles</span></a> -->
+                            </section>
+                        </div>
+                        <div class="col-lg-6">
+                            <section class="panel">
+                                <header class="panel-heading"><!--<i class="fa fa-info-circle"></i>--> Tecnología del espectador
+  <!-- <button type="button" class="btn btn-primary"><i class="fa fa-linux"></i> Sistema Operativo</button>
+  <button type="button" class="btn btn-info"><i class="fa  fa-tablet"></i> Dispositivo</button> -->
+                                </header>
+                                <?php mostrargrafica4(); ?>
+                                <div class="panel-body text-center">
+                                    <div id="hero-donut" class="graph"></div>
+                                </div>
+                               <!-- <a href="#"><span class="detalles">Más Detalles</span></a> -->
+                            </section>
+                        </div>
+                    </div>
+                    <!-- page end-->
+
+                <div class="row">
+                </div>
+            </section>
+        </section>
+        <!--main content end-->
+
+        <!-- Right Slidebar start -->
+        <!-- Right Slidebar end -->
+
+        <!--footer start-->
+        <footer class="site-footer">
+            <div class="text-center">
+                2015 © VideoMetrik, un producto de CeHis Ltda.<a href="http://videometrik.com/panel/#" class="go-top">
+                    <i class="fa fa-angle-up"></i>
+                </a>
+            </div>
+        </footer>
+        <!--footer end-->
+    </section>
+
+    <!-- js placed at the end of the document so the pages load faster -->
+    <script src="libs/jquery.js"></script>
+    <script src="libs/bootstrap.min.js"></script>
+    <script src="libs/Chart.js" ></script>
+    <script src="libs/respond.min.js" ></script>
+
+    <script src="libs/bootstrap-select.min.js" ></script>
+    <script src="libs/defaults-es_CL.min.js" ></script>
+
+    <script src="libs/sweetalert.min.js" ></script>
+    <!--common script for all pages-->
+
+
+
+    <script src="js/funciones.js" ></script>
+    <script src="js/home.js" ></script>
+    
+
+  </body>
+</html>
