@@ -10,6 +10,7 @@ function iniciarModulo()
   $("#txtHome_Applications").select_cargarApplications(function()
     {
       home_cargarPrimerosDatos();
+      revisarUsuariosOnline();
     });
 }
 
@@ -59,13 +60,36 @@ function home_cargarPrimerosDatos()
     }, function(data, textStatus, xhr) 
     {
       $("#lblHome_Actuales").text((data.usrOnline));
-      $("#lblHome_Totales").text(data.conexionesTotales);
+      $("#lblHome_Totales").text(data.conTotales);
       $("#lblHome_Unicos").text(data.usrUnicos);
       
       var tPromedioH = Math.trunc(data.tiempoPromedio/60/60);
       var tPromedioM = Math.trunc((data.tiempoPromedio/60)-(tPromedioH*60));
       var tPromedioS = Math.trunc(data.tiempoPromedio-(tPromedioH*60*60) - (tPromedioM*60));
 
-      $("#lblHome_TiempoPromedio").text(CompletarConCero(tPromedioH) + ':' + CompletarConCero(tPromedioM) + ':' + CompletarConCero(tPromedioS));
-    }, 'json');
+      $("#lblHome_TiempoPromedio").text(CompletarConCero(tPromedioH, 2) + ':' + CompletarConCero(tPromedioM, 2) + ':' + CompletarConCero(tPromedioS, 2));
+      $("#cntHome_PrimeraLinea .imgCargando").hide();
+
+      setTimeout(home_cargarPrimerosDatos, 60*1000*10);
+    }, 'json').fail(function()
+    {
+      setTimeout(home_cargarPrimerosDatos, 60*1000*1);
+    });
+}
+
+function revisarUsuariosOnline()
+{
+  $.post('scripts/php/home_cargarUsuariosOnline.php', 
+    {
+      Usuario : Usuario.id,
+      Aplicacion : $("#txtHome_Applications").val()
+    }, function(data, textStatus, xhr) 
+    {
+      $("#img_Home_Actuales").hide();
+      $("#lblHome_Actuales").text((data));
+      setTimeout(revisarUsuariosOnline, 30*1000);
+    }).fail(function()
+    {
+      setTimeout(revisarUsuariosOnline, 5*1000);
+    });
 }

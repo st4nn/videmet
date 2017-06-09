@@ -5,7 +5,7 @@
 
    $idUsuario = addslashes($_POST['Usuario']);
 
-   $sql = "SELECT
+   $sql = "SELECT DISTINCT
             applications.idapplication_application AS id,
             applications.name_application AS name
           FROM
