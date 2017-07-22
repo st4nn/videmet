@@ -779,11 +779,11 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
 }
 
 .state-overview .terques {
-    background: #6ccac9;
+    background: #009688;
 }
 
 .state-overview .red {
-    background: #ff6c60;
+    background: #f44336;
 }
 
 .state-overview .yellow {
@@ -791,7 +791,11 @@ ul.top-menu > li > a:hover, ul.top-menu > li > a:focus {
 }
 
 .state-overview .blue {
-    background: #57c8f2;
+    background: #2196f3;
+}
+
+.state-overview .green {
+    background: #4caf50;
 }
 
 /*main chart*/

@@ -13,13 +13,11 @@
 
    date_default_timezone_set('America/Bogota');
 
-   /*$fechaIni = date('Y-m-d');
-   $fechaFin = $fechaIni;*/
-
    $Respuesta = array('usrOnline' => 0, 'conTotales' => 0, 'usrUnicos' => 0, 'tiempoPromedio' => 0);
 
    $sql = "SELECT 
             COUNT(sessions.idsession_session) AS conexionesTotales,
+            MAX(sessions.uconcurrent_sessions) AS maxAudiencia,
             COUNT(distinct(viewers.ip_viewer)) AS usuariosUnicos,
             SUM(sessions.x_duration) AS duracion
           FROM 
@@ -32,12 +30,12 @@
             AND sessions.date_mysql >= '$fechaIni 00:00:00'
             AND sessions.date_mysql <= '$fechaFin 23:59:59';";
 
-
    $result = $link->query($sql);
    $fila =  $result->fetch_array(MYSQLI_ASSOC);
 
    $Respuesta['usrUnicos'] = validarNull_Float($fila['usuariosUnicos']);
    $Respuesta['conTotales'] = validarNull_Float($fila['conexionesTotales']);
+   $Respuesta['maxAudiencia'] = validarNull_Float($fila['maxAudiencia']);
    $tmpConTotales = $Respuesta['conTotales'];
    if ($tmpConTotales == 0)
    {
