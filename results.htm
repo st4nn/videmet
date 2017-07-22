@@ -1,0 +1,541 @@
+﻿<html>
+  <head>
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="imagetoolbar" content="false">
+    <title>
+    </title>
+    <script language="javascript" type="text/javascript">
+				if(navigator.appName == "Netscape")
+				{
+					if(navigator.appVersion.indexOf("Safari")>-1)
+					{
+						//alert("u r using safari");
+					}
+					document.write('<link rel="stylesheet" href="../../b8f899c0-a53b-455d-b6ca-9cc07be8bb0c/style_netscape.css" type="text/css">');
+				}
+				else
+				{
+					document.write('<link rel="stylesheet" href="../../b8f899c0-a53b-455d-b6ca-9cc07be8bb0c/style.css" type="text/css">');
+				}
+			  </script>
+    <script language="javascript" src="../../lib/html/functions/behactions.js" type="text/javascript">
+    </script>
+    <script language="javascript" src="../../lib/html/functions/exercise.js" type="text/javascript">
+    </script>
+    <script language="javascript" src="../../lib/html/functions/pasteFlashMovie.js" type="text/javascript">
+    </script>
+    <script language="javascript" src="../../lib/html/functions/timeline.js" type="text/javascript"> </script>
+    <script language="javascript" type="text/javascript" xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:dsxsl="http://www.digital-spirit.de/2004/XPATH/Function">
+	
+	var audioonsite = null;
+	var dataLocation = null;
+	var fromWhere = null;
+	
+	 
+	if(parent){
+		if(parent.location.href != self.location.href)//nur wenn echter parent
+			dataLocation = parent;	 
+	}
+	 
+	function iAmLoaded(){
+		if(parent)
+			parent.contentPageIsLoaded =true
+	}
+	
+	function initMedia(){
+		if(dataLocation)
+		{	
+			if(dataLocation.mediaPlayerVolume != null)
+			{
+				ds_sound.player.Volume = dataLocation.mediaPlayerVolume;
+			}
+		}
+
+			
+		rebuildAudioText();
+	}
+  hideElements("nextAudioText");
+  hideElements("prevAudioText");
+	</script>
+    <script LANGUAGE="JavaScript">
+					//This variable is used to check if the scorm communication is allowed on this site-type
+					var testPageType = "Result page";
+
+					if(parent.scormConfig)
+						parent.scormConfig.currentWorkingState.testFinished = true;
+					var playAudioInReview = true;					
+					
+					if(parent && parent.isTesting == true && parent.naviStructure){
+						 if(!parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.isReviewable)
+							parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.testAttempts++;
+					}
+					
+					function setBottomPageOfPage(){
+						if(parent){
+							if(parent.document.getElementById("pageOfPageDiv")){
+								if(parent.navBar)
+									parent.navBar.SetPageOfPageDiv(parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item);
+							}
+						}
+					}	
+
+					/**
+					 * 
+					 */
+					function filterProcessedTasks(show){
+                        var actStructure = parent.naviStructure.Structures[parent.naviStructure.ActiveStructure];
+                        var actChapter = actStructure.Item;
+						var allProcessed = true;
+						var taskList = '';
+						
+                        for(var z = 0; z < actChapter.Parent.Count; z++)
+						{
+                            var aPage =  actChapter.Parent[z];
+                            var aPageStatusTrue =  "";
+                            var aPageStatusFalse =  "";
+                            if(aPage.Type == 'Page')
+							{
+                                if(aPage.Processed){
+									aPage.SetEnabledInSitearray(!show);
+                                }
+								
+								if(aPage.SubType == 'Task'){
+									allProcessed = allProcessed && aPage.Processed;
+									taskList += '<tr><td>' + aPage.Title + '</td>';
+										if(aPage.Processed == true)
+										{
+											taskList += '<td>' + aPageStatusTrue + '</td></tr>\n';
+										}
+										else if(aPage.Processed == false)	
+										{
+											taskList += '<td>' + aPageStatusFalse + '</td></tr>\n';
+										}
+								}
+                            }
+                        }
+						
+						if(allProcessed){
+							if(document.getElementById('incompleteinfo')){
+								document.getElementById('incompleteinfo').style.display = 'none';
+							}
+							var actChapter = parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item;
+							for(var z = 0; z < actChapter.Parent.Count; z++)
+							{
+								var aPage =  actChapter.Parent[z];
+								if(aPage.Type == 'Page')
+								{
+									if(aPage.Processed){
+										aPage.SetEnabledInSitearray(true);
+									}
+								}
+							}
+						} else {
+							//write result
+							var incompleteinfoHtml = '';
+							incompleteinfoHtml += '<table class="textVisible2" width="80%"><tr><th align="left"></th><th align="left"></th><tr>\n';
+							incompleteinfoHtml += taskList;
+							incompleteinfoHtml += '</table>\n';
+							if(document.getElementById('incompleteinfotable')){
+								document.getElementById('incompleteinfotable').innerHTML = incompleteinfoHtml;
+							}
+						}
+					}
+					
+					function showResultsIfReviewmodeFinished(){
+						if(parent && parent.naviStructure)
+						{
+							if((parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.testAttempts >= parent.maxTestTries)|| parent.isReview == true)
+							{
+								writeResultTable();
+								setTestScoreAndStatus();
+								if(document.getElementById('reviewinfo')) {
+									document.getElementById('reviewinfo').style.display ='none';
+								}
+							}
+						}
+					}
+					
+					function showResultsIfCompleted(){
+						if(parent && parent.naviStructure) 
+						{
+							var isReview = parent.isReview;
+							var isMustBeCompleted = parent.isMustBeCompleted;
+							var maxTriesReached = (parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.testAttempts >= parent.maxTestTries);
+							
+							if(isReview || !isMustBeCompleted || (maxTriesReached &&parent.isRetestAllowed == false))
+							{
+								if(document.getElementById('incompleteinfo')) 
+								{
+									document.getElementById('incompleteinfo').style.display = 'none';
+								}
+							}
+							else 
+							{
+								filterProcessedTasks(true);
+							}
+						}
+					}
+				</script>
+  </head><body onload="setBottomPageOfPage();if(parent && parent.navBar && parent.navBar != null)parent.navBar.refreshButton.SetVisible(false);if(parent && parent.paintPointCounter)parent.paintPointCounter();showResultsIfCompleted();showResultsIfReviewmodeFinished();if(parent.showhidegoonbutton)window.setTimeout('parent.showhidegoonbutton()',0);" onunload="if(parent && parent.navBar && parent.navBar != null)parent.navBar.refreshButton.SetVisible(true); if(window.usageTracking) usageTracking();" onContextMenu="return false" onkeydown="if(parent){if(parent.keywaspressed)parent.keywaspressed(event,'page')};" class="body5"><div id="textLayer" class="audio5"></div><div id="EGABA" class="headline5"></div><div id="EFABA" class="textPosition5" tabindex="0" style="width:398px;height:100px;position:absolute;left:13px;top:80px;z-index:0;"><span id="EAFABA" class="text5"></span></div><div id="EEABA" class="imagePosition5" style=""><img id="EEABA" src="../../c7585b61-4aca-44d3-a39a-7371b49e0baf/en/Testergebnis_Standard_L5.jpg" class="image5" border="0"></div><div id="reviewinfo" style="visibility:hidden;z-index:998;position:relative;top:0px:left:0px"></div><div id="incompleteinfo" style="visibility:hidden; z-index:999; position:absolute; top:0px; left:0px; width:100%; height:100%;"></div><script language="javascript" type="text/javascript">
+				
+				var result = 0;
+				document.getElementById("reviewinfo").style.visibility = "visible";
+				document.getElementById("incompleteinfo").style.visibility = "visible";
+				
+				function unhidechilds(elem)
+				{
+				    if(elem.style)
+					    elem.style.visibility = "visible";
+					if(elem.childNodes.length>0)
+					{
+						for(var i=0; i < elem.childNodes.length;i++)
+						{
+						    unhidechilds(elem.childNodes[i]);
+						}
+					}
+				}
+				
+				if(parent){
+					if(parent.naviStructure){
+						if(parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.isReviewable)
+							unhidechilds(document.getElementById("reviewinfo"));
+						
+						if(parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.isMustBeCompleted)
+							unhidechilds(document.getElementById("incompleteinfo"));
+					}
+				}
+				
+				
+				
+				
+				
+				</script><div id="EAAABA" class="textPosition5" tabindex="0" style="width:488px;height:330px;position:absolute;left:42px;top:50px;z-index:1;"><span id="EAAAABA" class="text5">Lamentablemente, no aprobó el cuestionario. <br>Recibió<br>&nbsp;&nbsp;&nbsp;de 6 puntos posibles.<br><br>Haga clic en “Revisión” para examinar de nuevo sus respuestas.<br>Haga clic en “Cuestionario” en el menú para tomar el cuestionario <br>de nuevo.</span></div><div id="EBBABA" class="textPosition5" tabindex="0" style="width:480px;height:120px;position:absolute;left:42px;top:50px;z-index:3;"><span id="EABBABA" class="text5">¡Felicitaciones! <br>Recibió<br>&nbsp;&nbsp;&nbsp;de 6 puntos posibles.<br><br>Haga clic en “Revisión” para examinar de nuevo sus respuestas.<br>Ahora ha completado el curso y su estado de finalización se ha <br>registrado en el sistema de gestión del aprendizaje.</span></div><div id="EABABA" class="textPosition5" tabindex="0" style="width:480px;height:50px;position:absolute;left:42px;top:345px;z-index:9999;"><span id="EAABABA" class="text5">En la siguiente página puede imprimir su certificado personal.</span></div><div id="tblResults" style="position: absolute; left: 42px; top: 175px; width: 420px; height: 210px; z-index: 999;"><table width="420" class="textVisible5"><tr><td id="tdTopic1" width="300"></td><td id="tdRawScore1" width="20" align="center"></td><td id="tdMaxScore1" width="20" align="center"></td><td id="tdRating1" width="0" align="center"></td><td id="tdReview1" width="80" align="center"></td></tr><tr><td id="tdTopic2" width="300"></td><td id="tdRawScore2" width="20" align="center"></td><td id="tdMaxScore2" width="20" align="center"></td><td id="tdRating2" width="0" align="center"></td><td id="tdReview2" width="80" align="center"></td></tr><tr><td id="tdTopic3" width="300"></td><td id="tdRawScore3" width="20" align="center"></td><td id="tdMaxScore3" width="20" align="center"></td><td id="tdRating3" width="0" align="center"></td><td id="tdReview3" width="80" align="center"></td></tr><tr><td id="tdTopic4" width="300"></td><td id="tdRawScore4" width="20" align="center"></td><td id="tdMaxScore4" width="20" align="center"></td><td id="tdRating4" width="0" align="center"></td><td id="tdReview4" width="80" align="center"></td></tr><tr><td id="tdTopic5" width="300"></td><td id="tdRawScore5" width="20" align="center"></td><td id="tdMaxScore5" width="20" align="center"></td><td id="tdRating5" width="0" align="center"></td><td id="tdReview5" width="80" align="center"></td></tr><tr><td id="tdTopic6" width="300"></td><td id="tdRawScore6" width="20" align="center"></td><td id="tdMaxScore6" width="20" align="center"></td><td id="tdRating6" width="0" align="center"></td><td id="tdReview6" width="80" align="center"></td></tr><tr><td colspan="5" height="10px"></td></tr><tr style="font-weight: bold"><td width="300"></td><td id="tdRawScoreSum" width="20" align="center"></td><td id="tdMaxScoreSum" width="20" align="center"></td><td id="tdRatingSum" width="0" align="center"></td></tr></table></div><div id="resultspoints" style="position: absolute; left: 42px; top: 83px; width: 15px; height: 20px; z-index: 5; visibility:hidden; font-weight: bold;"></div><script language="javascript" type="text/javascript">
+	var percentsSum;
+	
+	function writeResultTable()
+	{
+		if (parent)
+		{
+			if (parent.hideNavigation)
+			{			
+				var fb_window = MM_findObj("");
+				if (fb_window)
+				{
+					fb_window.style.visibility = "visible";
+					var fb_window2 = MM_findObj("");
+					if (fb_window2)					
+					{
+						//fb_window.style.visibility = "hidden";	/* infolayer wurde sonst immer ausgeblendet */				
+						setTestScoreAndStatus();
+						document.getElementById('reviewinfo').style.display ='none';
+						if(parent && parent.naviStructure)
+						{
+							parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.isReviewable=false;
+						}
+					}
+				}
+				if(parent.scoreRaw == "")
+				{
+					percentsSum = 	(parent.scoreRaw*100) / parent.scoreMax;
+				}
+				else
+				{
+					percentsSum = (parent.scoreRawPC)? parent.scoreRawPC : 0;							
+				}
+				
+			MM_findObj("tdTopic1").innerHTML = 'CÓDIGO DE CONDUCTA: CUMPLIMIENTO';
+			MM_findObj("tdRawScore1").innerHTML = parent.scoresPerTopic["0"];
+			MM_findObj("tdMaxScore1").innerHTML = '1';
+        	
+            MM_findObj("tdRating1").innerHTML = (parent.scoresPerTopic["0"] >= 1)? '' : '';
+  MM_findObj("tdReview1").innerHTML = '<a href="javascript: void(0);" onclick="setReviewMode(0);return false;">Revisión</a>';
+				
+			MM_findObj("tdTopic2").innerHTML = 'ANTICORRUPCIÓN';
+			MM_findObj("tdRawScore2").innerHTML = parent.scoresPerTopic["1"];
+			MM_findObj("tdMaxScore2").innerHTML = '1';
+        	
+            MM_findObj("tdRating2").innerHTML = (parent.scoresPerTopic["1"] >= 1)? '' : '';
+  MM_findObj("tdReview2").innerHTML = '<a href="javascript: void(0);" onclick="setReviewMode(1);return false;">Revisión</a>';
+				
+			MM_findObj("tdTopic3").innerHTML = 'OBSEQUIOS, ATENCIONES E INVITACIONES';
+			MM_findObj("tdRawScore3").innerHTML = parent.scoresPerTopic["2"];
+			MM_findObj("tdMaxScore3").innerHTML = '1';
+        	
+            MM_findObj("tdRating3").innerHTML = (parent.scoresPerTopic["2"] >= 1)? '' : '';
+  MM_findObj("tdReview3").innerHTML = '<a href="javascript: void(0);" onclick="setReviewMode(2);return false;">Revisión</a>';
+				
+			MM_findObj("tdTopic4").innerHTML = 'CONFLICTOS DE INTERÉS';
+			MM_findObj("tdRawScore4").innerHTML = parent.scoresPerTopic["3"];
+			MM_findObj("tdMaxScore4").innerHTML = '1';
+        	
+            MM_findObj("tdRating4").innerHTML = (parent.scoresPerTopic["3"] >= 1)? '' : '';
+  MM_findObj("tdReview4").innerHTML = '<a href="javascript: void(0);" onclick="setReviewMode(3);return false;">Revisión</a>';
+				
+			MM_findObj("tdTopic5").innerHTML = 'TRABAJO CON TERCEROS';
+			MM_findObj("tdRawScore5").innerHTML = parent.scoresPerTopic["4"];
+			MM_findObj("tdMaxScore5").innerHTML = '1';
+        	
+            MM_findObj("tdRating5").innerHTML = (parent.scoresPerTopic["4"] >= 1)? '' : '';
+  MM_findObj("tdReview5").innerHTML = '<a href="javascript: void(0);" onclick="setReviewMode(4);return false;">Revisión</a>';
+				
+			MM_findObj("tdTopic6").innerHTML = 'NORMAS DE COMPETENCIA';
+			MM_findObj("tdRawScore6").innerHTML = parent.scoresPerTopic["5"];
+			MM_findObj("tdMaxScore6").innerHTML = '1';
+        	
+            MM_findObj("tdRating6").innerHTML = (parent.scoresPerTopic["5"] >= 1)? '' : '';
+  MM_findObj("tdReview6").innerHTML = '<a href="javascript: void(0);" onclick="setReviewMode(5);return false;">Revisión</a>';
+					
+				//if(parent.scoreRawPC > parent.scoreRaw)
+				//parent.scoreRaw  = parent.scoreRawPC;
+				if(document.getElementById("tblResults"))
+				{
+					document.getElementById("tblResults").style.visiblility = "hidden"
+					document.getElementById("tblResults").style.display = "none"
+				}				
+			}
+			else
+			{
+				if(!parent.isReview)
+				{
+										
+					parent.saveData();
+					calcScorePerTopic();
+					calcPercentsPerTopic();
+					parent.scoreRaw = getTotalTopicResult();
+				}
+				percentsSum = getTotalTopicPercents();
+
+				result = Math.round((parent)? ((parent.scoreRaw*100) / parent.scoreMax) : 0);
+				var points = (parent)? (parent.scoreRaw) : 0;
+				percentsSum = result;						
+				
+				document.getElementById("resultspoints").innerHTML = points;
+				document.getElementById("resultspoints").style.visibility = "visible";
+				
+			MM_findObj("tdTopic1").innerHTML = 'CÓDIGO DE CONDUCTA: CUMPLIMIENTO';
+			MM_findObj("tdRawScore1").innerHTML = parent.scoresPerTopic["0"];
+			MM_findObj("tdMaxScore1").innerHTML = '1';
+        	
+            MM_findObj("tdRating1").innerHTML = (parent.scoresPerTopic["0"] >= 1)? '' : '';
+  MM_findObj("tdReview1").innerHTML = '<a href="javascript: void(0);" onclick="setReviewMode(0);return false;">Revisión</a>';
+				
+			MM_findObj("tdTopic2").innerHTML = 'ANTICORRUPCIÓN';
+			MM_findObj("tdRawScore2").innerHTML = parent.scoresPerTopic["1"];
+			MM_findObj("tdMaxScore2").innerHTML = '1';
+        	
+            MM_findObj("tdRating2").innerHTML = (parent.scoresPerTopic["1"] >= 1)? '' : '';
+  MM_findObj("tdReview2").innerHTML = '<a href="javascript: void(0);" onclick="setReviewMode(1);return false;">Revisión</a>';
+				
+			MM_findObj("tdTopic3").innerHTML = 'OBSEQUIOS, ATENCIONES E INVITACIONES';
+			MM_findObj("tdRawScore3").innerHTML = parent.scoresPerTopic["2"];
+			MM_findObj("tdMaxScore3").innerHTML = '1';
+        	
+            MM_findObj("tdRating3").innerHTML = (parent.scoresPerTopic["2"] >= 1)? '' : '';
+  MM_findObj("tdReview3").innerHTML = '<a href="javascript: void(0);" onclick="setReviewMode(2);return false;">Revisión</a>';
+				
+			MM_findObj("tdTopic4").innerHTML = 'CONFLICTOS DE INTERÉS';
+			MM_findObj("tdRawScore4").innerHTML = parent.scoresPerTopic["3"];
+			MM_findObj("tdMaxScore4").innerHTML = '1';
+        	
+            MM_findObj("tdRating4").innerHTML = (parent.scoresPerTopic["3"] >= 1)? '' : '';
+  MM_findObj("tdReview4").innerHTML = '<a href="javascript: void(0);" onclick="setReviewMode(3);return false;">Revisión</a>';
+				
+			MM_findObj("tdTopic5").innerHTML = 'TRABAJO CON TERCEROS';
+			MM_findObj("tdRawScore5").innerHTML = parent.scoresPerTopic["4"];
+			MM_findObj("tdMaxScore5").innerHTML = '1';
+        	
+            MM_findObj("tdRating5").innerHTML = (parent.scoresPerTopic["4"] >= 1)? '' : '';
+  MM_findObj("tdReview5").innerHTML = '<a href="javascript: void(0);" onclick="setReviewMode(4);return false;">Revisión</a>';
+				
+			MM_findObj("tdTopic6").innerHTML = 'NORMAS DE COMPETENCIA';
+			MM_findObj("tdRawScore6").innerHTML = parent.scoresPerTopic["5"];
+			MM_findObj("tdMaxScore6").innerHTML = '1';
+        	
+            MM_findObj("tdRating6").innerHTML = (parent.scoresPerTopic["5"] >= 1)? '' : '';
+  MM_findObj("tdReview6").innerHTML = '<a href="javascript: void(0);" onclick="setReviewMode(5);return false;">Revisión</a>';
+				
+			}
+			
+			if(parent)
+			{
+				MM_findObj("tdRawScoreSum").innerHTML = parent.scoreRaw;
+				MM_findObj("tdRawScoreSum").innerHTML = parent.scoreRaw;
+				MM_findObj("tdMaxScoreSum").innerHTML = parent.scoreMax;
+				MM_findObj("tdRatingSum").innerHTML = (parent.scoreRaw >= Math.round(parent.scoreMax * parent.perCent)) ? '' : '';
+			}
+			
+			thisPercent = parent.scoreRaw;
+			if(parent.scoreRaw>0)
+				thisPercent = Math.round((parent.scoreRaw / parent.scoreMax )*100)
+			if ( thisPercent >= Math.round(100 * parent.perCent))
+			{
+				if(parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].certIsPrinted == "true")
+				{
+					hideLinkContainer();
+				}
+				else
+				{
+					
+		showElements('EBBABA','EABBABA','EABABA','EAABABA');
+	
+				}
+			}
+			else
+			{
+			 	
+		showElements('EAAABA','EAAAABA');
+	
+			}
+								
+		}
+	}
+     
+	function setTestScoreAndStatus()
+	{
+		if(parent && parent.naviStructure)
+		{
+			if (parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.Score < parent.scoreRaw){
+				parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.Score = parent.scoreRaw;
+			}
+			
+			parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.maxScore = parent.scoreMax;		
+		
+			thisPercent = parent.scoreRaw;
+			if(parent.scoreRaw>0)
+				thisPercent = Math.round((parent.scoreRaw / parent.scoreMax )*100)
+			if(thisPercent >= Math.round(100 * parent.perCent) || parent.proceedToNextChapterEvenTestFails == true)
+			{
+				parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.Passed = true;
+				parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.Status = 2;
+				parent.checkrequirements();			
+				parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.CheckStatus();			
+				if((parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.Index + 1) < (parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Count))
+				{
+					parent.navBar.nextButton.SetEnabled(true);
+					parent.navBar.nextButton.SetVisible(true);
+				}
+			}
+			
+			if(parent.menu != null)
+				parent.menu.Refresh();
+				
+			if(parent)
+				if(parent.menu)
+					parent.menu.ItemHasChanged(parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item);								
+				
+			if(parent.saveData)
+				parent.saveData('isOneProjectSCO');	
+				
+			
+		}	
+	}
+	
+	function calcScorePerTopic(){
+		resetVarPerTopic(parent.scoresPerTopic);
+		for(page in parent.pageScores)
+		{
+			for(topic in parent.ch_bottom_data.testPages)
+			{
+				if(getIndexById(parent.ch_bottom_data.testPages[topic], page) != -1)
+				{
+					if(parent.scoresPerTopic[topic] != null)
+						parent.scoresPerTopic[topic] += parent.pageScores[page];
+				}
+			}
+		}
+	}
+
+	if(parent && parent.naviStructure)
+	{
+		if(!parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.isReviewable)
+		{
+			writeResultTable();
+			setTestScoreAndStatus();				
+		}
+		else
+		{
+			for(var i =0; i < parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.Count;i++)
+			{
+				parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent[i].Status = 1;
+			}		
+			parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.Passed = false;
+			parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.Status = 1;	
+			parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].Item.Parent.CheckStatus();						
+		}
+	}
+
+	function calcPercentsPerTopic()
+	{
+		resetVarPerTopic(parent.percentsPerTopic);
+		for(topic in parent.ch_bottom_data.testPages)
+		{
+			for(page in parent.pagePercents)
+			{
+				if(getIndexById(parent.ch_bottom_data.testPages[topic], page) != -1)
+					if(parent.percentsPerTopic[topic] != null)
+						parent.percentsPerTopic[topic] += parent.pagePercents[page];
+			}
+			parent.percentsPerTopic[topic] = parseInt(Math.round(parent.percentsPerTopic[topic] / parent.ch_bottom_data.pagesPerTopic[topic]));
+		}
+	}
+
+	function resetVarPerTopic(which)
+	{
+		for(topic in which)
+			which[topic] = 0;
+	}
+	
+	function getTotalTopicResult()
+	{
+		var result = 0;
+		for(topic in parent.scoresPerTopic)
+		{
+			result += Number(parent.scoresPerTopic[topic]);
+		}
+		return result;
+	}
+
+	function getTotalTopicPercents()
+	{
+		var result = 0;
+		var counter = 0;
+		for(topic in parent.percentsPerTopic)
+		{
+			result += Number(parent.percentsPerTopic[topic]);
+			counter ++;
+		}
+
+		result = Math.round(result / counter);
+		return result;
+	}
+
+	function getGuid(path)
+	{
+		if (path.lastIndexOf("/") == -1)
+			return "";
+
+		return path.substr(path.lastIndexOf("/") - 36, 36);
+	}
+
+	function getIndexById(array, guid)
+	{
+		for (index = 0; index < array.length; index++)
+			if (guid == getGuid(array[index]))
+				return index;
+
+		return -1;
+	}
+
+	function setReviewMode(whichTopic)
+	{
+		parent.reviewMode(whichTopic);
+	}
+
+	function hideLinkContainer()
+	{
+		parent.naviStructure.Structures[parent.naviStructure.ActiveStructure].certIsPrinted = "true";
+		
+		hideElements('EBBABA','EABBABA','EABABA','EAABABA');
+		
+	}	
+</script><script language="javascript" type="text/javascript" xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:dsxsl="http://www.digital-spirit.de/2004/XPATH/Function">showElements();</script><script language="javascript" type="text/javascript" xmlns:msxsl="urn:schemas-microsoft-com:xslt" xmlns:dsxsl="http://www.digital-spirit.de/2004/XPATH/Function">showElements('EGABA','EFABA','EAFABA','EEABA');</script></body></html>

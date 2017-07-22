@@ -9,9 +9,60 @@ function iniciarModulo()
   $("#lblHome_Fecha").text(home_ponerFecha());
   $("#txtHome_Applications").select_cargarApplications(function()
     {
-      home_cargarPrimerosDatos();
+      $("#txtHome_Inicio_Periodo").trigger("change");
       revisarUsuariosOnline();
     });
+
+  $("#txtHome_Inicio_Periodo").on("change", function()
+  {
+    var value = $(this).val();
+    if (value > 2)
+    {
+      $("#cntHome_wUsrOnline").hide();
+      $(".cntHome_wInicio").removeClass('col-lg-3');
+      $(".cntHome_wInicio").addClass('col-lg-4');
+    } else
+    {
+      $("#cntHome_wUsrOnline").slideDown();
+      $(".cntHome_wInicio").removeClass('col-lg-4');
+      $(".cntHome_wInicio").addClass('col-lg-3');
+    }
+
+    var f = new Date();
+    var fIni = '';
+
+    value = parseInt(value);
+    console.log(value);
+    switch (value) {
+      case 1:
+          fIni = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-" + CompletarConCero(f.getDate(), 2) + ' 00:00:00';
+        break;
+      case 2:
+          f = new Date(f-(60000*60*24));
+          fIni = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-" + CompletarConCero(f.getDate(), 2) + " " + CompletarConCero(f.getHours(), 2) + ":" + CompletarConCero(f.getMinutes(), 2) + ":" + CompletarConCero(f.getSeconds(), 2);
+        break;
+      case 3:
+          f = new Date(f-(60000*60*24*7));
+          fIni = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-" + CompletarConCero(f.getDate(), 2) + " 00:00:00";
+        break;
+      case 4:
+          f = new Date(f-(60000*60*24*30));
+          fIni = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-" + CompletarConCero(f.getDate(), 2) + " 00:00:00";
+        break;
+      case 5:
+          f = new Date(f-(60000*60*24*30*2));
+          fIni = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-" + CompletarConCero(f.getDate(), 2) + " 00:00:00";
+        break;
+      default: 
+          Mensaje("Hey","Algo salió mal, dile a tu proveedor que intentaste cambiar el Periodo en Inicio y te salió esto", "error");
+        break;
+    }
+
+    home_cargarPrimerosDatos();
+
+    $("#txtHome_Inicio_fechaIni").val(fIni);
+    $("#txtHome_Inicio_fechaFin").val(obtenerFecha());
+  });
 }
 
 function home_ponerFecha()
@@ -54,8 +105,8 @@ function home_cargarPrimerosDatos()
   $.post('scripts/php/home_cargarPrimerosDatos.php', 
     {
       Usuario : Usuario.id,
-      fechaIni : '2017-06-01',
-      fechaFin : '2017-06-01',
+      fechaIni : $("#txtHome_Inicio_fechaIni").val(),
+      fechaFin : $("#txtHome_Inicio_fechaIni").val(),
       Aplicacion : $("#txtHome_Applications").val()
     }, function(data, textStatus, xhr) 
     {

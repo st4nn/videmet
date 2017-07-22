@@ -13,8 +13,8 @@
 
    date_default_timezone_set('America/Bogota');
 
-   $fechaIni = date('Y-m-d');
-   $fechaFin = $fechaIni;
+   /*$fechaIni = date('Y-m-d');
+   $fechaFin = $fechaIni;*/
 
    $Respuesta = array('usrOnline' => 0, 'conTotales' => 0, 'usrUnicos' => 0, 'tiempoPromedio' => 0);
 
@@ -31,6 +31,7 @@
             AND sessions.x_duration > 2
             AND sessions.date_mysql >= '$fechaIni 00:00:00'
             AND sessions.date_mysql <= '$fechaFin 23:59:59';";
+
 
    $result = $link->query($sql);
    $fila =  $result->fetch_array(MYSQLI_ASSOC);

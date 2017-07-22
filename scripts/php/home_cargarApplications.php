@@ -11,7 +11,9 @@
           FROM
             applications
           WHERE
-            applications.iduser_application = '$idUsuario';";
+            applications.iduser_application = '$idUsuario'
+         GROUP BY
+            applications.name_application ;";
 
    $result = $link->query($sql);
 

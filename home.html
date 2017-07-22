@@ -15,7 +15,7 @@
     <link href="css/bootstrap-reset.css" rel="stylesheet">
     <!--external css-->
     <!--<link href="css/slidebars.css" rel="stylesheet"> -->
-    <link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="assets/font-awesome/font-awesome.css" rel="stylesheet" />
 
       <!--right slidebar-->
       <link href="css/slidebars.css" rel="stylesheet">
@@ -98,18 +98,19 @@
                   <div class="col-lg-12 text-right">
                     <section class="panel">
                       <div class="panel-body">
-                        <div class="col-sm-6">
+                        <div class="col-sm-7">
                           <select id="txtHome_Applications" class="selectpicker form-control">
                           </select>
                         </div>
-                        <div class="col-sm-6">
-                          <small id="lblHome_Fecha"></small>
-                          <select class="selectpicker col-sm-4">
-                            <option>Hoy</option>
-                            <option>Últimas 24 hrs</option>
-                            <option>Últimos 7 días</option>
-                            <option>Últimos 30 días</option>
-                            <option>Últimos dos meses</option>
+                        <div class="col-sm-5">
+                          <input type="hidden" id="txtHome_Inicio_fechaIni">
+                          <input type="hidden" id="txtHome_Inicio_fechaFin">
+                          <select id="txtHome_Inicio_Periodo" class="selectpicker col-sm-8 text-right">
+                            <option value="1">Hoy</option>
+                            <option value="2">Últimas 24 hrs</option>
+                            <option value="3">Últimos 7 días</option>
+                            <option value="4">Últimos 30 días</option>
+                            <option value="5">Últimos dos meses</option>
                           </select>
                         </div>
                         <div class="col-lg-3 col-sm-6">
@@ -117,63 +118,89 @@
                       </div>
                     </section>
                   </div>
-
-                  <div class="col-lg-3 col-sm-6">
-                      <section class="panel">
-                          <div class="symbol yellow">
-                              <i class="fa fa-users"></i>
-                          </div>
-                          <div class="value">
-                              <img id="img_Home_Actuales" src="img/wait.gif" alt="Cargando" class="imgCargando">
-                              <h1 class=" count">
-                                <div id="lblHome_Actuales" class=""></div>
-                              </h1>
-                              <p>Usuarios Online</p>
-                          </div>
-                      </section>
-                  </div>
-
-                 <div class="col-lg-3 col-sm-6">
-                      <section class="panel">
-                          <div class="symbol blue">
-                              <i class="fa fa-bar-chart-o"></i>
-                          </div>
-                          <div class="value">
-                              <img src="img/wait.gif" alt="Cargando" class="imgCargando">
-                              <h1 class="count">
-                                  <div id="lblHome_Totales" class="lblHome_Dato"></div>
-                              </h1>
-                              <p>Conexiones Totales</p>
-                          </div>
-                      </section>
-                  </div>
-
-                  <div class="col-lg-3 col-sm-6">
+                  
+                  
+                    <div class="col-lg-9 col-md-6 cntHome_wInicio">
+                      <h3>Reporte y Estadísticas de Audiencia de Vídeo Streaming</h3>
+                      <i><small id="lblHome_Fecha"></small></i>
+                    </div>
+                    
+                    <div id="cntHome_wUsrOnline" class="col-lg-3 col-md-6 cntHome_wInicio">
+                        <section class="panel">
+                            <div class="symbol red">
+                                <i class="fa fa-users"></i>
+                            </div>
+                            <div class="value">
+                                <img id="img_Home_Actuales" src="img/wait.gif" alt="Cargando" class="imgCargando">
+                                <h1 class=" ">
+                                  <div id="lblHome_Actuales" class=""></div>
+                                </h1>
+                                <p>Usuarios Online</p>
+                            </div>
+                        </section>
+                    </div>
+                  
+                  <div class="col-lg-3 col-md-6 cntHome_wInicio">
                       <section class="panel">
                           <div class="symbol terques">
                               <i class="fa fa-user"></i>
                           </div>
                           <div class="value">
                               <img src="img/wait.gif" alt="Cargando" class="imgCargando">
+                              <p><small>Total</small></p>
                               <h1 class="count">
-                                  <div id="lblHome_Unicos"></div>
+                                  <div id="lblHome_Unicos" class="lblHome_Dato"></div>
                               </h1>
                               <p> Usuarios Únicos</p>
                           </div>
                       </section>
                   </div>
 
-                  <div class="col-lg-3 col-sm-6">
+                  <div class="col-lg-3 col-md-6 cntHome_wInicio">
                       <section class="panel">
-                          <div class="symbol red">
+                          <div class="symbol blue">
+                              <i class="fa fa-bar-chart-o"></i>
+                          </div>
+                          <div class="value">
+                              <img src="img/wait.gif" alt="Cargando" class="imgCargando">
+                              <p><small>Total</small></p>
+                              <h1 class="count">
+                                  <div id="lblHome_Totales" class="lblHome_Dato"></div>
+                              </h1>
+                              <p>Reproducciones</p>
+                          </div>
+                      </section>
+                  </div>
+
+
+                  <div class="col-lg-3 col-md-6 cntHome_wInicio">
+                      <section class="panel">
+                          <div class="symbol yellow">
                               <i class="fa fa-clock-o"></i>
                           </div>
                           <div class="value">
                               <img src="img/wait.gif" alt="Cargando" class="imgCargando">
-                              <h1 class=" count">
-                                  <span id="lblHome_TiempoPromedio"></span>
+                              <p><small>Tiempo</small></p>
+                              <h1 class="count">
+                                  <span id="lblHome_TiempoPromedio" class="lblHome_Dato"></span>
                               </h1>
-                              <p>Tiempo Promedio</p>
+                              <p>Tiempo por Conexión</p>
+                          </div>
+                      </section>
+                  </div>
+
+                  <div class="col-lg-3 col-md-6 cntHome_wInicio">
+                      <section class="panel">
+                          <div class="symbol green">
+                              <i class="fa fa-line-chart"></i>
+                          </div>
+                          <div class="value">
+                              <img src="img/wait.gif" alt="Cargando" class="imgCargando">
+                              <p><small>Max Audiencia</small></p>
+                              <h1 class="count">
+                                  <span id="lblHome_MaxAudiencia" class="lblHome_Dato"></span>
+                              </h1>
+                              <p>Usuarios Simultáneos</p>
                           </div>
                       </section>
                   </div>
@@ -181,67 +208,92 @@
                 </div>
                 <!--state overview end-->
 
-                                    <!-- page start-->
-                    <div class="row hide">
-                        <div class="col-lg-6">
+                <!-- page start-->
+                    <div class="row">
+                        <div class="col-lg-4 col-md-6">
                             <section class="panel">
                                 <header class="panel-heading"><!--<i class="fa fa-info-circle"></i>-->
-                                    Histórico de datos
+                                    Espectadores por Hora
                                 </header>
                                 <div class="panel-body">
-                                <?php mostrargrafica1(); ?>
-                                    <div id="hero-graph" class="graph"></div>
+                                  <div id="cntHome_Gra_EspXHora" class="col-md-12"></div>
                                 </div>
-                                <!-- <a href="#"><span class="detalles">Más Detalles</span></a> -->
                             </section>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-4 col-md-6">
                             <section class="panel">
                                 <header class="panel-heading"><!--<i class="fa fa-info-circle"></i>-->
-                                    Origen del espectador
-                                    <!-- <button type="button" class="btn btn-primary"><i class="fa fa-bar-chart-o"></i> Conexiones</button>
-                                    <button type="button" class="btn btn-info"><i class="fa fa-user"></i> Usuarios</button> -->
+                                    Espectadores por Día
                                 </header>
-                               <div class="panel-body">
-                                <?php mostrargrafica2(); ?>
-                                <div id="regions_div"></div>
-                                </div> 
-                               <!-- <a href="#"><span class="detalles">Más Detalles</span></a> -->
-                            </section>
-                        </div>
-                    </div>
-                    <div class="row hide">
-                        <div class="col-lg-6">
-                            <section class="panel">
-                                <header class="panel-heading"><!--<i class="fa fa-info-circle"></i>-->
-                                    Audiencia por meses
-                                </header>
-                                
                                 <div class="panel-body">
-                                  <div><?php mostrargrafica3(); ?></div>
-                                </div> 
-                                <p>
-                              <!-- <a href="#"><span class="detalles">Más Detalles</span></a> -->
-                            </section>
-                        </div>
-                        <div class="col-lg-6">
-                            <section class="panel">
-                                <header class="panel-heading"><!--<i class="fa fa-info-circle"></i>--> Tecnología del espectador
-  <!-- <button type="button" class="btn btn-primary"><i class="fa fa-linux"></i> Sistema Operativo</button>
-  <button type="button" class="btn btn-info"><i class="fa  fa-tablet"></i> Dispositivo</button> -->
-                                </header>
-                                <?php mostrargrafica4(); ?>
-                                <div class="panel-body text-center">
-                                    <div id="hero-donut" class="graph"></div>
+                                  <div id="cntHome_Gra_EspXDia" class="col-md-12"></div>
                                 </div>
-                               <!-- <a href="#"><span class="detalles">Más Detalles</span></a> -->
                             </section>
                         </div>
-                    </div>
-                    <!-- page end-->
 
-                <div class="row">
-                </div>
+                        <div class="col-lg-4 col-md-6">
+                            <section class="panel">
+                                <header class="panel-heading"><!--<i class="fa fa-info-circle"></i>-->
+                                    Espectadores por Franja Horaria
+                                </header>
+                                <div class="panel-body">
+                                  <table class="table margin-bottom-0">
+                                    <thead>
+                                      <tr>
+                                        <th>Horario</th>
+                                        <th>Reproducciones</th>
+                                        <th>Usuario Únicos</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr >
+                                        <td style="vertical-align:middle;" class="text-right">Madrugrada</td>
+                                        <td><h3 class="text-center" id="lblHome_Tbl_EspXFranja_madrugada">0</h3></td>
+                                        <td><h3 class="text-center" id="lblHome_Tbl_EspXFranja_Usrmadrugada">0</h3></td>
+                                      </tr>
+                                      <tr>
+                                        <td style="vertical-align:middle;" class="text-right">Mañana</td>
+                                        <td><h3 class="text-center" id="lblHome_Tbl_EspXFranja_maniana">0</h3></td>
+                                        <td><h3 class="text-center" id="lblHome_Tbl_EspXFranja_Usrmaniana">0</h3></td>
+                                      </tr>
+                                      <tr>
+                                        <td style="vertical-align:middle;" class="text-right">Tarde</td>
+                                        <td><h3 class="text-center" id="lblHome_Tbl_EspXFranja_tarde">0</h3></td>
+                                        <td><h3 class="text-center" id="lblHome_Tbl_EspXFranja_Usrtarde">0</h3></td>
+                                      </tr>
+                                      <tr>
+                                        <td style="vertical-align:middle;" class="text-right">Noche</td>
+                                        <td><h3 class="text-center" id="lblHome_Tbl_EspXFranja_noche">0</h3></td>
+                                        <td><h3 class="text-center" id="lblHome_Tbl_EspXFranja_Usrnoche">0</h3></td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                            </section>
+                        </div>
+                        
+                        <div class="col-lg-8 col-md-6 col-sm-12">
+                            <section class="panel">
+                                <header class="panel-heading"><!--<i class="fa fa-info-circle"></i>-->
+                                    Espectadores por país
+                                </header>
+                                <div class="panel-body">
+                                  <div id="cntHome_Gra_EspXPais" class="col-md-12"></div>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <section class="panel">
+                                <header class="panel-heading"><!--<i class="fa fa-info-circle"></i>-->
+                                    Dispositivos del Usuario
+                                </header>
+                                <div class="panel-body">
+                                  <div id="cntHome_Gra_EspXDispositivo" class="col-md-12"></div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
             </section>
         </section>
         <!--main content end-->
@@ -271,8 +323,8 @@
 
     <script src="libs/sweetalert.min.js" ></script>
     <!--common script for all pages-->
-
-
+    
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <script src="js/funciones.js" ></script>
     <script src="js/home.js" ></script>
