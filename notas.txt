@@ -1,0 +1,35 @@
+SELECT 
+	ip2location_db1.country_code,
+	ip2location_db1.country_name,
+    COUNT(sessions.idsession_session) AS cantidad
+FROM sessions
+INNER JOIN viewers ON sessions.idviewer_session=viewers.id_viewer
+INNER JOIN ip2location_db1 ON viewers.ip_innet <= ip2location_db1.ip_from AND viewers.ip_innet >= ip2location_db1.ip_to
+WHERE sessions.event_session = 'Play'
+  AND sessions.applications_id IN (103,
+                                   104,
+                                   105,
+                                   117,
+                                   118,
+                                   176,
+                                   177,
+                                   188,
+                                   189)
+  AND sessions.x_duration > 2
+  AND sessions.date_mysql >= '2017-06-22 00:00:00 00:00:00'
+  AND sessions.date_mysql <= '2017-07-22 18:38:32 23:59:59'
+GROUP BY 1, 2;
+
+UPDATE `viewers` 
+INNER JOIN ip2location_db1 ON ip_innet >= ip2location_db1.ip_from AND ip_innet = ip2location_db1.ip_to
+SET  viewers.country_name = ip2location_db1.country_name, viewers.country_code = ip2location_db1.country_code
+
+
+2147483.647
+
+UPDATE `viewers` 
+INNER JOIN ip2location_db1 ON ip_innet >= ip2location_db1.ip_from AND ip_innet = ip2location_db1.ip_to
+SET  viewers.country_name = ip2location_db1.country_name, viewers.country_code = ip2location_db1.country_code
+
+
+2147483.647

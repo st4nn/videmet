@@ -54,6 +54,8 @@ function iniciarModulo()
     graficaEspectadoresPorTiempo('cntHome_Gra_EspXDia', ['Día', 'Reproducciones', 'Usuarios Únicos'], 2, ['#cddc39', '#795548']);
 
     tablaEspectadoresPorFranja();
+
+    graficasPorDispositivo('cntHome_Gra_EspXDispositivo');
   });
 
   $("#txtHome_Applications").select_cargarApplications(function()
@@ -266,9 +268,9 @@ function tablaEspectadoresPorFranja()
     }, 'json');
 }
 
-function graficasPorDispositivo()
+function graficasPorDispositivo(idObj)
 {
-  $.post('scripts/php/home_cargarEspectadoresPorFranja.php', 
+  $.post('scripts/php/home_cargarEspectadoresPorDispositivo.php', 
     {
       Usuario : Usuario.id,
       fechaIni : $("#txtHome_Inicio_fechaIni").val(),
@@ -280,28 +282,26 @@ function graficasPorDispositivo()
       {
 
       } else
-      {
-        
+      { 
+        var arr = [];
+        $.each(data, function(index, val) 
+        {
+          arr.push([val.etiqueta, parseInt(val.cantidad)]);
+        });
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+          var data = new google.visualization.DataTable();
+          data.addColumn('string', 'Topping');
+          data.addColumn('number', 'Slices');
+          data.addRows(arr);
+
+          var options = {'height':350};
+
+          var chart = new google.visualization.PieChart(document.getElementById(idObj));
+          chart.draw(data, options);
+        } 
       }
     }, 'json');
-  google.charts.load('current', {'packages':['corechart']});
-  google.charts.setOnLoadCallback(drawChart);
-
-  function drawChart() {
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Topping');
-    data.addColumn('number', 'Slices');
-    data.addRows([
-      ['Mushrooms', 3],
-      ['Onions', 1],
-      ['Olives', 1],
-      ['Zucchini', 1],
-      ['Pepperoni', 2]
-    ]);
-
-    var options = {'height':350};
-
-    var chart = new google.visualization.PieChart(document.getElementById(idObj));
-    chart.draw(data, options);
-  } 
 }

@@ -36,8 +36,9 @@
             sessions.event_session = 'Play'
             AND sessions.applications_id IN ($idAplicacion)
             AND sessions.x_duration > 2
-            AND sessions.date_mysql >= '$fechaIni 00:00:00'
-            AND sessions.date_mysql <= '$fechaFin 23:59:59'
+            AND sessions.date_session >= '$fechaIni 00:00:00'
+            AND sessions.date_session <= '$fechaFin 23:59:59'
+            AND device.device IS NOT NULL
          GROUP BY
             1
          ORDER BY 1;";
