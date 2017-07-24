@@ -14,13 +14,4 @@
 		$fila =  $result->fetch_array(MYSQLI_ASSOC);
 		return $fila['ids'];
 	} 
-
-	function validarNull_Float($str)
-	{
-		if ($str == null)
-		{
-		 return 0;
-		} 
-		return (float)$str;
-	}
 ?>

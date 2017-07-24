@@ -6,48 +6,126 @@ function iniciarModulo()
     style: 'count'
   });
 
+  $("#cntHome_Gra_EspXLinea_Buttons button").on("click", function(evento)
+  {
+    evento.preventDefault();
+    var tipo = parseInt($(this).attr("data-valor"));
+
+    $("#cntHome_Gra_EspXLinea_Buttons button").removeClass('btn-primary');
+    $(this).addClass('btn-primary');
+
+    graficaEspectadoresPorTiempo('cntHome_Gra_EspXLinea', ['', 'Reproducciones', 'Usuarios Únicos'], tipo, ['#ffb300', '#b71c1c']);
+  });
+
   $("#lblHome_Fecha").text(home_ponerFecha());
 
   $("#txtHome_Inicio_Periodo").on("change", function()
   {
-    $("#cntHome_PrimeraLinea .lblHome_Dato").slideUp();
-    $("#cntHome_PrimeraLinea .imgCargando").show();
     var value = $(this).val();
+    if (value != 6)
+    {
+        $("#cntHome_PrimeraLinea .lblHome_Dato").slideUp();
+        $("#cntHome_PrimeraLinea .imgCargando").show();
 
-    var f = new Date();
-    var fIni = '';
-    f = new Date(f-(60000*60*24*30));
+        var f = new Date();
+        var fIni = '';
+        f = new Date(f-(60000*60*24*30));
 
-    value = parseInt(value);
-    switch (value) {
-      case 1:
-          fIni = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-" + CompletarConCero(f.getDate(), 2) + ' 00:00:00';
-        break;
-      case 2:
-          f = new Date(f-(60000*60*24));
-          fIni = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-" + CompletarConCero(f.getDate(), 2) + " " + CompletarConCero(f.getHours(), 2) + ":" + CompletarConCero(f.getMinutes(), 2) + ":" + CompletarConCero(f.getSeconds(), 2);
-        break;
-      case 3:
-          f = new Date(f-(60000*60*24*7));
-          fIni = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-" + CompletarConCero(f.getDate(), 2) + " 00:00:00";
-        break;
-      case 4:
-          f = new Date(f-(60000*60*24*30));
-          fIni = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-" + CompletarConCero(f.getDate(), 2) + " 00:00:00";
-        break;
-      case 5:
-          f = new Date(f-(60000*60*24*30*2));
-          fIni = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-" + CompletarConCero(f.getDate(), 2) + " 00:00:00";
-        break;
-      default: 
-          Mensaje("Hey","Algo salió mal, dile a tu proveedor que intentaste cambiar el Periodo en Inicio y te salió esto", "error");
-        break;
+        value = parseInt(value);
+        switch (value) {
+          case 1:
+              fIni = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-" + CompletarConCero(f.getDate(), 2) + ' 00:00:00';
+            break;
+          case 2:
+              f = new Date(f-(60000*60*24));
+              fIni = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-" + CompletarConCero(f.getDate(), 2) + " " + CompletarConCero(f.getHours(), 2) + ":" + CompletarConCero(f.getMinutes(), 2) + ":" + CompletarConCero(f.getSeconds(), 2);
+            break;
+          case 3:
+              f = new Date(f-(60000*60*24*7));
+              fIni = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-" + CompletarConCero(f.getDate(), 2) + " 00:00:00";
+            break;
+          case 4:
+              f = new Date(f-(60000*60*24*30));
+              fIni = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-" + CompletarConCero(f.getDate(), 2) + " 00:00:00";
+            break;
+          case 5:
+              f = new Date(f-(60000*60*24*30*2));
+              fIni = f.getFullYear() + "-" + CompletarConCero(f.getMonth() +1, 2) + "-" + CompletarConCero(f.getDate(), 2) + " 00:00:00";
+            break;
+          default: 
+              Mensaje("Hey","Algo salió mal, dile a tu proveedor que intentaste cambiar el Periodo en Inicio y te salió esto", "error");
+            break;
+        }   
+
+        $("#txtHome_Inicio_fechaIni").val(fIni);
+        $("#txtHome_Inicio_fechaFin").val(obtenerFecha());
+
+        $("#txtHome_CustomDate_Desde").val(fIni);
+
+        home_cargarGraficas();
+    } else
+    {
+        $("#btnHome_CustomDate_Pantalla").show();
+        $("#btnHome_CustomDate_Imprimir").hide();
+        $("#cntHome_CustomDate").modal({
+          "backdrop"  : "static",
+          "keyboard"  : true,
+          "show"      : true            
+        });
     }
 
-    $("#txtHome_Inicio_fechaIni").val(fIni);
-    $("#txtHome_Inicio_fechaFin").val(obtenerFecha());
 
+  });
+
+  $("#btnHome_CustomDate_Pantalla").on("click", function(evento)
+  {
+    evento.preventDefault();
+    $("#cntHome_CustomDate").modal('hide');
+
+    $("#txtHome_Inicio_fechaIni").val($("#txtHome_CustomDate_Desde").val());
+    $("#txtHome_Inicio_fechaFin").val($("#txtHome_CustomDate_Hasta").val());
+
+    home_cargarGraficas();
+
+    $("#txtHome_CustomDate_Desde").val('');
+    $("#txtHome_CustomDate_Hasta").val('');
+  });
+
+  $("#lnkHome_ExportarReporte").on("click", function(evento)
+    {
+        evento.preventDefault();
+
+        /*$("#btnHome_CustomDate_Pantalla").hide();
+        $("#btnHome_CustomDate_Imprimir").show();
+        $("#cntHome_CustomDate").modal({
+          "backdrop"  : "static",
+          "keyboard"  : true,
+          "show"      : true            
+        });*/
+        window.print();
+    });
+
+  $("#btnHome_CustomDate_Imprimir").on("click", function(evento)
+    {
+        evento.preventDefault();
+
+        $("#txtHome_CustomDate_Desde").val('');
+        $("#txtHome_CustomDate_Hasta").val('');
+    });
+
+  $("#txtHome_Applications").select_cargarApplications(function()
+    {
+        $("#txtHome_Inicio_Periodo").val(3);
+      $("#txtHome_Inicio_Periodo").trigger("change");
+      revisarUsuariosOnline();
+    });
+}
+
+function home_cargarGraficas()
+{
     home_cargarPrimerosDatos();
+
+    graficaEspectadoresPorTiempo('cntHome_Gra_EspXLinea', ['', 'Reproducciones', 'Usuarios Únicos'], 5, ['#ffb300', '#b71c1c']);
 
     graficaEspectadoresPorTiempo('cntHome_Gra_EspXHora', ['Hora', 'Reproducciones', 'Usuarios Únicos'], 1, ['#00838f', '#ec407a']);
 
@@ -56,13 +134,8 @@ function iniciarModulo()
     tablaEspectadoresPorFranja();
 
     graficasPorDispositivo('cntHome_Gra_EspXDispositivo');
-  });
 
-  $("#txtHome_Applications").select_cargarApplications(function()
-    {
-      $("#txtHome_Inicio_Periodo").trigger("change");
-      revisarUsuariosOnline();
-    });
+    graficasPorPais('cntHome_Gra_EspXPais');
 }
 
 function home_ponerFecha()
@@ -150,6 +223,8 @@ function revisarUsuariosOnline()
 
 function graficaEspectadoresPorTiempo(idObj, etiquetas, tipo, vColor)
 {
+  $("#" + idObj).hide();
+  $("#" + idObj).parent("div").parent("section").find(".imgCargando").show();
   vColor = vColor || '#a52714';
 
   $.post('scripts/php/home_cargarEspectadoresPorTiempo.php', 
@@ -160,12 +235,13 @@ function graficaEspectadoresPorTiempo(idObj, etiquetas, tipo, vColor)
       Aplicacion : $("#txtHome_Applications").val(),
       tipo : tipo
     }, function(data, textStatus, xhr) {
-     
+     $("#" + idObj).parent("div").parent("section").find(".imgCargando").hide();
       if (data == 0)
       {
 
       } else
       {
+        $("#" + idObj).slideDown();
         var idx = 0;
         var arr = [];
         arr[idx] = etiquetas;
@@ -205,6 +281,9 @@ function graficaEspectadoresPorTiempo(idObj, etiquetas, tipo, vColor)
 
 function tablaEspectadoresPorFranja()
 {
+    var idObj = 'tblHome_Franjas';
+    $("#" + idObj).hide();
+    $("#" + idObj).parent("div").parent("section").find(".imgCargando").show();
   $.post('scripts/php/home_cargarEspectadoresPorFranja.php', 
     {
       Usuario : Usuario.id,
@@ -213,11 +292,16 @@ function tablaEspectadoresPorFranja()
       Aplicacion : $("#txtHome_Applications").val(),
       tipo : 1
     }, function(data, textStatus, xhr) {
+
+        $("#" + idObj).parent("div").parent("section").find(".imgCargando").hide();
+
       if (data == 0)
       {
 
       } else
       {
+        $("#" + idObj).slideDown();
+
         var dia = {};
 
         dia.madrugrada = 0;
@@ -270,6 +354,8 @@ function tablaEspectadoresPorFranja()
 
 function graficasPorDispositivo(idObj)
 {
+    $("#" + idObj).hide();
+    $("#" + idObj).parent("div").parent("section").find(".imgCargando").show();
   $.post('scripts/php/home_cargarEspectadoresPorDispositivo.php', 
     {
       Usuario : Usuario.id,
@@ -278,11 +364,13 @@ function graficasPorDispositivo(idObj)
       Aplicacion : $("#txtHome_Applications").val(),
       tipo : 1
     }, function(data, textStatus, xhr) {
+        $("#" + idObj).parent("div").parent("section").find(".imgCargando").hide();
       if (data == 0)
       {
-
+        
       } else
       { 
+        $("#" + idObj).slideDown();
         var arr = [];
         $.each(data, function(index, val) 
         {
@@ -297,9 +385,58 @@ function graficasPorDispositivo(idObj)
           data.addColumn('number', 'Slices');
           data.addRows(arr);
 
-          var options = {'height':350};
+          var options = {
+            'height':500,
+            'pieHole': 0.4};
 
           var chart = new google.visualization.PieChart(document.getElementById(idObj));
+          chart.draw(data, options);
+        } 
+      }
+    }, 'json');
+}
+
+function graficasPorPais(idObj)
+{
+    $("#txtHome_CustomDate_Desde").val('');
+
+    $("#" + idObj).hide();
+    $("#" + idObj).parent("div").parent("section").find(".imgCargando").show();
+    $.post('scripts/php/home_cargarEspectadoresPorPais.php', 
+    {
+      Usuario : Usuario.id,
+      fechaIni : $("#txtHome_Inicio_fechaIni").val(),
+      fechaFin : $("#txtHome_Inicio_fechaFin").val(),
+      Aplicacion : $("#txtHome_Applications").val(),
+      tipo : 1
+    }, function(data, textStatus, xhr) {
+
+        $("#" + idObj).parent("div").parent("section").find(".imgCargando").hide();
+      if (data == 0)
+      {
+
+      } else
+      { 
+        $("#" + idObj).slideDown();
+        var arr = [['País', 'Cantidad']];
+        $.each(data, function(index, val) 
+        {
+          arr.push([val.etiqueta, parseInt(val.cantidad)]);
+        });
+         google.charts.load('current', {
+            'packages':['geochart'],
+            'mapsApiKey': 'AIzaSyDQ-WIBwmrkkXHw6Kzr1E_0pO__2iAasCs'
+          });
+          google.charts.setOnLoadCallback(drawRegionsMap);
+
+
+        function drawRegionsMap() {
+
+        var data = google.visualization.arrayToDataTable(arr);
+          
+          var options = {'height':350};
+
+          var chart = new google.visualization.GeoChart(document.getElementById(idObj));
           chart.draw(data, options);
         } 
       }

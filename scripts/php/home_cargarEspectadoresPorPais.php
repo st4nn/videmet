@@ -27,18 +27,17 @@
    date_default_timezone_set('America/Bogota');
 
    $sql = "SELECT 
-            device.device AS etiqueta,
+            viewers.country_name AS etiqueta,
             COUNT(sessions.idsession_session) AS cantidad
           FROM 
             sessions
-            INNER JOIN device ON sessions.id_device=device.id_device
+            INNER JOIN viewers ON viewers.id_viewer = sessions.idviewer_session
           WHERE
             sessions.event_session = 'Play'
             AND sessions.applications_id IN ($idAplicacion)
             AND sessions.x_duration > 2
             AND sessions.date_session >= '$fechaIni 00:00:00'
             AND sessions.date_session <= '$fechaFin 23:59:59'
-            AND device.device IS NOT NULL
          GROUP BY
             1
          ORDER BY 1;";

@@ -1,0 +1,26 @@
+@media print {
+   /*
+   .value
+   {
+   	width: 25% !important;
+   	display: inline-block;
+   }
+   */
+  
+  .cntHome_wInicio 
+  {
+  	width: 23% !important;
+   	display: inline-block;
+  }
+
+   #cntHome_Gra_EspXLinea_Buttons button
+   {
+   		display: none;
+   }
+
+   #cntHome_Gra_EspXLinea_Buttons button.btn-primary
+   {
+   		display: inline !important;
+   }
+
+}

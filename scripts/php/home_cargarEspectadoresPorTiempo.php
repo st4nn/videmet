@@ -19,6 +19,18 @@
       case 2:
             $tipo = '%W';
          break;
+      case 3:
+            $tipo = '%H:%i %Y-%m-%d';
+         break;
+      case 4:
+            $tipo = '%H %Y-%m-%d';
+         break;
+      case 5:
+            $tipo = '%Y-%m-%d';
+         break;
+      case 6:
+            $tipo = '%Y-%m';
+         break;
       default:
             $tipo = '%H';
          break;
