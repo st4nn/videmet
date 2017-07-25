@@ -29,7 +29,7 @@ function iniciarModulo()
 
         var f = new Date();
         var fIni = '';
-        f = new Date(f-(60000*60*24*30));
+        //f = new Date(f-(60000*60*24*30));
 
         value = parseInt(value);
         switch (value) {
@@ -125,6 +125,7 @@ function home_cargarGraficas()
 {
     home_cargarPrimerosDatos();
 
+    var idAgrupar = parseInt($("#cntHome_Gra_EspXLinea_Buttons button.btn-primary").attr("data-valor"));
     graficaEspectadoresPorTiempo('cntHome_Gra_EspXLinea', ['', 'Reproducciones', 'Usuarios Únicos'], 5, ['#ffb300', '#b71c1c']);
 
     graficaEspectadoresPorTiempo('cntHome_Gra_EspXHora', ['Hora', 'Reproducciones', 'Usuarios Únicos'], 1, ['#00838f', '#ec407a']);
@@ -334,7 +335,7 @@ function tablaEspectadoresPorFranja()
                 dia.Usrtarde += parseInt(val.usuariosUnicos);
               } else
               {
-                if (!isNaN(val))
+                if (!isNaN(val.cantidad))
                 {
                   dia.noche += parseInt(val.cantidad);
                   dia.Usrnoche += parseInt(val.usuariosUnicos);
